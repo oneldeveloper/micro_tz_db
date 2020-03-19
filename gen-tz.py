@@ -502,15 +502,23 @@ def make_friendly(posix_string: str) -> str:
     return friendly
 
 def print_friendly_json(timezones_dict):
-    print(timezones_dict)
     friendly_dict = {k: make_friendly(v) for k, v in timezones_dict.items()}
     json.dump(friendly_dict, sys.stdout, indent=0, sort_keys=True, separators=(",", ":"))
+
+def print_embedded(timezones_dict):
+    with open("zones.template.c") as template:
+        print(template.read())
+    pairs = ['\n  {.name="%s", .posix_str="%s"}' % (name, posix_str)
+             for name, posix_str in timezones_dict.items()]
+    print("""const posix_tz_db_pair posix_tz_db_tzs[%d] = {%s\n}""" %
+          (len(pairs), ', '.join(pairs)))
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Generates POSIX timezones strings reading data from " + ZONES_DIR)
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument("-j", "--json", action="store_true", help="outputs JSON")
     group.add_argument("-c", "--csv", action="store_true", help="outputs CSV")
+    group.add_argument("-e", "--embedded", action="store_true", help="outputs C")
     group.add_argument("-f", "--friendly-json", action="store_true",
                        help="outputs JSON with user-friendly timezone abbreviations")
     data = parser.parse_args()
@@ -521,5 +529,7 @@ if __name__ == "__main__":
         print_json(timezones)
     elif data.csv:
         print_csv(timezones)
+    elif data.embedded:
+        print_embedded(timezones)
     else:
         print_friendly_json(timezones)
