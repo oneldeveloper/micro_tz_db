@@ -8,6 +8,7 @@ const char * posix_tz_db_get_posix_str(const char * name)
     if (0 == strcmp(pair->name, name)) {
       return pair->posix_str;
     }
+    pair++;
   }
   return NULL;
 }

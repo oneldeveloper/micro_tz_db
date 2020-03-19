@@ -510,8 +510,13 @@ def print_embedded(timezones_dict):
         print(template.read())
     pairs = ['\n  {.name="%s", .posix_str="%s"}' % (name, posix_str)
              for name, posix_str in timezones_dict.items()]
-    print("""const posix_tz_db_pair posix_tz_db_tzs[%d] = {%s\n}""" %
+    print("""const posix_tz_db_pair posix_tz_db_tzs[%d] = {%s\n};""" %
           (len(pairs), ', '.join(pairs)))
+
+def print_header(timezones_dict):
+    with open("zones.template.h") as template:
+        print(template.read())
+    print("extern const posix_tz_db_pair posix_tz_db_tzs[%d];" % len(timezones_dict));
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Generates POSIX timezones strings reading data from " + ZONES_DIR)
@@ -519,6 +524,7 @@ if __name__ == "__main__":
     group.add_argument("-j", "--json", action="store_true", help="outputs JSON")
     group.add_argument("-c", "--csv", action="store_true", help="outputs CSV")
     group.add_argument("-e", "--embedded", action="store_true", help="outputs C")
+    group.add_argument("-H", "--header", action="store_true", help="outputs .h for the embedded target")
     group.add_argument("-f", "--friendly-json", action="store_true",
                        help="outputs JSON with user-friendly timezone abbreviations")
     data = parser.parse_args()
@@ -531,5 +537,7 @@ if __name__ == "__main__":
         print_csv(timezones)
     elif data.embedded:
         print_embedded(timezones)
+    elif data.header:
+        print_header(timezones)
     else:
         print_friendly_json(timezones)
