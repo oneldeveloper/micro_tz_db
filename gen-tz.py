@@ -3,6 +3,7 @@
 import sys
 import argparse
 import json
+import re
 
 ZONES_DIR = "/usr/share/zoneinfo/"
 ZONES = [
@@ -490,17 +491,35 @@ def print_csv(timezones_dict):
 def print_json(timezones_dict):
     json.dump(timezones_dict, sys.stdout, indent=0, sort_keys=True, separators=(",", ":"))
 
+def make_friendly(posix_string: str) -> str:
+  match = re.match(r"^([A-Za-z]+|<[^>]*>)", posix_string)
+  if match is None:
+      return ""
+  friendly = match.group()
+  if friendly and friendly[0] == "<" and friendly[-1] == ">":
+    return "UTC%s" % friendly[1:-1]
+  else:
+    return friendly
+
+def print_friendly_json(timezones_dict):
+    print(timezones_dict)
+    friendly_dict = {k: make_friendly(v) for k, v in timezones_dict.items()}
+    json.dump(friendly_dict, sys.stdout, indent=0, sort_keys=True, separators=(",", ":"))
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Generates POSIX timezones strings reading data from " + ZONES_DIR)
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument("-j", "--json", action="store_true", help="outputs JSON")
     group.add_argument("-c", "--csv", action="store_true", help="outputs CSV")
+    group.add_argument("-f", "--friendly-json", action="store_true",
+                       help="outputs JSON with user-friendly timezone abbreviations")
     data = parser.parse_args()
 
     timezones = make_timezones_dict()
 
     if data.json:
         print_json(timezones)
-    else:
+    elif data.csv:
         print_csv(timezones)
+    else:
+        print_friendly_json(timezones)
