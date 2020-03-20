@@ -7,7 +7,11 @@ TAG=posix-tz-db
 
 all: zones.o zones.h zones.json zones.csv
 
-zones.o: zones.c zones.h
+# zones.o intentionally does not depend on making zones.c, since zones.c requires the 
+# consistent build environment provided by Docker or Arch Linux, and would only get
+# actually need an update a couple times a year or so. zones.c is checked in to source
+# control though, so build it once when it gets updated, commit it, and you're good.
+zones.o: zones.h
 	$(CC) -c -o zones.o $(CFLAGS) zones.c
 
 zones.c: docker
@@ -21,6 +25,9 @@ zones.csv: docker
 
 docker: Dockerfile scripts
 	docker build . -t $(TAG)
+
+run-example: example/example
+	example/example
 
 example: example/example
 

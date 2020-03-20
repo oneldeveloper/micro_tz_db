@@ -491,6 +491,7 @@ def print_csv(timezones_dict):
 def print_json(timezones_dict):
     json.dump(timezones_dict, sys.stdout, indent=0, sort_keys=True, separators=(",", ":"))
 
+
 def print_embedded(timezones_dict):
     with open("templates/zones.template.c") as template:
         template = template.read()
@@ -499,6 +500,7 @@ def print_embedded(timezones_dict):
     print(template.replace("// insert posix_tz_db_tzs here", 
           "const posix_tz_db_pair posix_tz_db_tzs[%d] = {%s\n};" %
           (len(pairs), ', '.join(pairs))))
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Generates POSIX timezones strings reading data from " + ZONES_DIR)
