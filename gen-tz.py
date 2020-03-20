@@ -506,7 +506,7 @@ def print_friendly_json(timezones_dict):
     json.dump(friendly_dict, sys.stdout, indent=0, sort_keys=True, separators=(",", ":"))
 
 def print_embedded(timezones_dict):
-    with open("zones.template.c") as template:
+    with open("templates/zones.template.c") as template:
         print(template.read())
     pairs = ['\n  {.name="%s", .posix_str="%s"}' % (name, posix_str)
              for name, posix_str in timezones_dict.items()]
@@ -514,7 +514,7 @@ def print_embedded(timezones_dict):
           (len(pairs), ', '.join(pairs)))
 
 def print_header(timezones_dict):
-    with open("zones.template.h") as template:
+    with open("templates/zones.template.h") as template:
         print(template.read())
     print("extern const posix_tz_db_pair posix_tz_db_tzs[%d];" % len(timezones_dict));
 
