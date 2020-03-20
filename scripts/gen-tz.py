@@ -491,20 +491,6 @@ def print_csv(timezones_dict):
 def print_json(timezones_dict):
     json.dump(timezones_dict, sys.stdout, indent=0, sort_keys=True, separators=(",", ":"))
 
-def make_friendly(posix_string: str) -> str:
-  match = re.match(r"^([A-Za-z]+|<[^>]*>)", posix_string)
-  if match is None:
-      return ""
-  friendly = match.group()
-  if friendly and friendly[0] == "<" and friendly[-1] == ">":
-    return "UTC%s" % friendly[1:-1]
-  else:
-    return friendly
-
-def print_friendly_json(timezones_dict):
-    friendly_dict = {k: make_friendly(v) for k, v in timezones_dict.items()}
-    json.dump(friendly_dict, sys.stdout, indent=0, sort_keys=True, separators=(",", ":"))
-
 def print_embedded(timezones_dict):
     with open("templates/zones.template.c") as template:
         print(template.read())
@@ -525,8 +511,6 @@ if __name__ == "__main__":
     group.add_argument("-c", "--csv", action="store_true", help="outputs CSV")
     group.add_argument("-e", "--embedded", action="store_true", help="outputs C")
     group.add_argument("-H", "--header", action="store_true", help="outputs .h for the embedded target")
-    group.add_argument("-f", "--friendly-json", action="store_true",
-                       help="outputs JSON with user-friendly timezone abbreviations")
     data = parser.parse_args()
 
     timezones = make_timezones_dict()
@@ -539,5 +523,3 @@ if __name__ == "__main__":
         print_embedded(timezones)
     elif data.header:
         print_header(timezones)
-    else:
-        print_friendly_json(timezones)
