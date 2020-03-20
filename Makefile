@@ -13,9 +13,6 @@ zones.o: zones.c zones.h
 zones.c: docker
 	docker run -i $(TAG) ./gen-tz.py -e > $@
 
-zones.h: docker
-	docker run -i $(TAG) ./gen-tz.py -H > $@
-
 zones.json: docker
 	docker run -i $(TAG) ./gen-tz.py -j > $@
 

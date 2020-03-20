@@ -1,10 +1,5 @@
 #pragma once
 
-typedef struct {
-    const char * name;
-    const char * posix_str;
-} posix_tz_db_pair;
-
 /**
  * Looks up the POSIX string corresponding to the given tz database name
  * @param[in]   name   the tz database name for the timezone in question
@@ -12,4 +7,7 @@ typedef struct {
  **/
 const char * posix_tz_db_get_posix_str(const char * name);
 
-extern const posix_tz_db_pair posix_tz_db_tzs[460];
+/**
+ * @return             the size of the tz database
+ **/
+unsigned long posix_tz_db_size();

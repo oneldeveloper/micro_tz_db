@@ -1,17 +1,10 @@
 #include "zones.h"
 #include <string.h>
 
-const char * posix_tz_db_get_posix_str(const char * name)
-{
-  const posix_tz_db_pair * pair = posix_tz_db_tzs;
-  while (pair->name) {
-    if (0 == strcmp(pair->name, name)) {
-      return pair->posix_str;
-    }
-    pair++;
-  }
-  return NULL;
-}
+typedef struct {
+    const char * name;
+    const char * posix_str;
+} posix_tz_db_pair;
 
 const posix_tz_db_pair posix_tz_db_tzs[460] = {
   {.name="Africa/Abidjan", .posix_str="GMT0"}, 
@@ -475,3 +468,21 @@ const posix_tz_db_pair posix_tz_db_tzs[460] = {
   {.name="Etc/Universal", .posix_str="UTC0"}, 
   {.name="Etc/Zulu", .posix_str="UTC0"}
 };
+
+const char * posix_tz_db_get_posix_str(const char * name)
+{
+  const posix_tz_db_pair * pair = posix_tz_db_tzs;
+  while (pair->name) {
+    if (0 == strcmp(pair->name, name)) {
+      return pair->posix_str;
+    }
+    pair++;
+  }
+  return NULL;
+}
+
+unsigned long posix_tz_db_size()
+{
+  return sizeof(posix_tz_db_tzs);
+}
+
