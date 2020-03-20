@@ -6,8 +6,3 @@
  * @return             the POSIX string for the timezone in question
  **/
 const char * posix_tz_db_get_posix_str(const char * name);
-
-/**
- * @return             the size of the tz database
- **/
-unsigned long posix_tz_db_size();

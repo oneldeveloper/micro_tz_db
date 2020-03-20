@@ -6,7 +6,7 @@ typedef struct {
     const char * posix_str;
 } posix_tz_db_pair;
 
-// insert posix_tz_db_tzs here
+static const posix_tz_db_pair posix_tz_db_tzs[];
 
 const char * posix_tz_db_get_posix_str(const char * name)
 {
@@ -18,9 +18,4 @@ const char * posix_tz_db_get_posix_str(const char * name)
     pair++;
   }
   return NULL;
-}
-
-unsigned long posix_tz_db_size()
-{
-  return sizeof(posix_tz_db_tzs);
 }

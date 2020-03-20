@@ -33,7 +33,6 @@ void print_local_time(const char *name) {
 }
 
 int main() {
-  printf("Total library db size: %lu B\n", posix_tz_db_size());
   print_local_time("America/New_York");
   print_local_time("Asia/Shanghai");
   print_local_time("Europe/Lisbon");

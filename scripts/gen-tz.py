@@ -494,12 +494,11 @@ def print_json(timezones_dict):
 
 def print_embedded(timezones_dict):
     with open("templates/zones.template.c") as template:
-        template = template.read()
+        print(template.read())
     pairs = ['\n  {.name="%s", .posix_str="%s"}' % (name, posix_str)
              for name, posix_str in timezones_dict.items()]
-    print(template.replace("// insert posix_tz_db_tzs here", 
-          "const posix_tz_db_pair posix_tz_db_tzs[%d] = {%s\n};" %
-          (len(pairs), ', '.join(pairs))))
+    print("\nstatic const posix_tz_db_pair posix_tz_db_tzs[] = {%s\n};" % 
+          ", ".join(pairs))
 
 
 if __name__ == "__main__":

@@ -6,7 +6,21 @@ typedef struct {
     const char * posix_str;
 } posix_tz_db_pair;
 
-const posix_tz_db_pair posix_tz_db_tzs[460] = {
+static const posix_tz_db_pair posix_tz_db_tzs[];
+
+const char * posix_tz_db_get_posix_str(const char * name)
+{
+  const posix_tz_db_pair * pair = posix_tz_db_tzs;
+  while (pair->name) {
+    if (0 == strcmp(pair->name, name)) {
+      return pair->posix_str;
+    }
+    pair++;
+  }
+  return NULL;
+}
+
+static const posix_tz_db_pair posix_tz_db_tzs[] = {
   {.name="Africa/Abidjan", .posix_str="GMT0"}, 
   {.name="Africa/Accra", .posix_str="GMT0"}, 
   {.name="Africa/Addis_Ababa", .posix_str="EAT-3"}, 
@@ -468,21 +482,3 @@ const posix_tz_db_pair posix_tz_db_tzs[460] = {
   {.name="Etc/Universal", .posix_str="UTC0"}, 
   {.name="Etc/Zulu", .posix_str="UTC0"}
 };
-
-const char * posix_tz_db_get_posix_str(const char * name)
-{
-  const posix_tz_db_pair * pair = posix_tz_db_tzs;
-  while (pair->name) {
-    if (0 == strcmp(pair->name, name)) {
-      return pair->posix_str;
-    }
-    pair++;
-  }
-  return NULL;
-}
-
-unsigned long posix_tz_db_size()
-{
-  return sizeof(posix_tz_db_tzs);
-}
-
