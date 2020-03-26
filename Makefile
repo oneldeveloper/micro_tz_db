@@ -3,7 +3,7 @@ CFLAGS=-I.
 DEPS = zones.h
 TAG=posix-tz-db
 
-.PHONY: all clean example
+.PHONY: all clean example docker
 
 all: zones.o zones.h zones.json zones.csv
 

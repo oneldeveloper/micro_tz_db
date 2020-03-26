@@ -495,7 +495,7 @@ def print_json(timezones_dict):
 def print_embedded(timezones_dict):
     with open("templates/zones.template.c") as template:
         print(template.read())
-    pairs = ['\n  {.name="%s", .posix_str="%s"}' % (name, posix_str)
+    pairs = ['\n  {"%s", "%s"}' % (name, posix_str)
              for name, posix_str in timezones_dict.items()]
     print("\nstatic const posix_tz_db_pair posix_tz_db_tzs[] = {%s\n};" % 
           ", ".join(pairs))
