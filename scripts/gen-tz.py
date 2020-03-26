@@ -498,7 +498,7 @@ def print_embedded(timezones_dict):
     pairs = ['\n  {"%s", "%s"}' % (name, posix_str)
              for name, posix_str in timezones_dict.items()]
     print("\nstatic const posix_tz_db_pair posix_tz_db_tzs[] = {%s\n};" % 
-          ", ".join(pairs))
+          ",".join(pairs))
 
 
 if __name__ == "__main__":
